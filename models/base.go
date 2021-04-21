@@ -14,6 +14,6 @@ func DBTx(table string) *gorm.DB {
 	return GetDB().Table(table)
 }
 
-func InitDB(db *gorm.DB) {
+func SetDefaultDB(db *gorm.DB) {
 	defaultDb = db
 }

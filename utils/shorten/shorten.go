@@ -1,5 +1,10 @@
 package shorten
 
+const (
+	minNum = 0xffffffff + 1
+	maxNum = 62*62*62*62*62*62 - 0xffffffff
+)
+
 // IDShorten Convert int64 to number base62
 func IDShorten(id int64) string {
 	id = intConvert(id)

@@ -7,8 +7,6 @@ import (
 	"time"
 )
 
-const minNum = 0xffffffff + 1
-const maxNum = 62*62*62*62*62*62 - 0xffffffff
 const numbers = maxNum - minNum
 
 func TestIntConvert(t *testing.T) {

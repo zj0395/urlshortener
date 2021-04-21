@@ -14,8 +14,8 @@ const (
 type UrlShorten struct {
 	ID    int64  `gorm:"column:id" json:"id"`
 	Url   string `gorm:"column:url" json:"url"`
-	IP    string `gorm:"column:ip" json:"ip"`
-	CTime int64  `gorm:"column:ctime" json:"ctime"`
+	Ip    string `gorm:"column:ip" json:"ip"`
+	Ctime int64  `gorm:"column:ctime" json:"ctime"`
 	Extra string `gorm:"column:extra" json:"extra"`
 }
 
@@ -26,5 +26,13 @@ func GetUrlShortenTable(url string) string {
 }
 
 func GetUrlShortenTableById(id int64) string {
-	return fmt.Sprintf("%s%d", gUrlShortenTablePrefix, (id-gUrlShortenIdBegin)%gUrlShortenTableCnt)
+	return fmt.Sprintf("%s%d", gUrlShortenTablePrefix, getUrlShortenTableIdxById(id))
+}
+
+func getUrlShortenTableIdxById(id int64) int64 {
+	res := (id - gUrlShortenIdBegin) % gUrlShortenTableCnt
+	if res < 0 {
+		res = 0
+	}
+	return res
 }

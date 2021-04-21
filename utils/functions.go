@@ -3,6 +3,7 @@ package utils
 import (
 	"strings"
 
+	"github.com/rs/xid"
 	"github.com/valyala/fasthttp"
 )
 
@@ -21,4 +22,9 @@ func ClientIP(ctx *fasthttp.RequestCtx) string {
 		return clientIP
 	}
 	return ctx.RemoteIP().String()
+}
+
+func GenLogId() string {
+	guid := xid.New()
+	return guid.String()
 }
