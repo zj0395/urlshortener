@@ -1,17 +1,22 @@
-# UrlShorten
-shorten a url to 6-size char combine from [0-9a-zA-Z].  
+# UrlShorten 短链接服务
+将长链接缩短为由[0-9a-zA-Z]组成的6位短链  
 
-## Quick Start
-### Basic
-1. Change every `config/*.tpl` file and delete `.tpl` from file name
-2. Just `go run main.go`
+## 快速开始
+1. 更改`config/*.tpl`文件中的mysql配置，并删除文件名中的`.tpl`
+2. 在自己的mysql中建表，可用`go run meta/sql_generate.go`生成建表sql
+3. 运行 `go run main.go`
 
-### Custom
-#### Generate a random algorithm for yourself
-1. You can generate a unique random sequence, see `utils/shorten/defines.go`
+### 自定义
+#### 生成自己的唯一递增序列
+1. 可以使用`go run meta/random_seq.go`生成自己的唯一序列，见`utils/shorten/defines.go`
 
-## Randomness test
-When number incr by one, the generate code will change a lot. Your can see the result from `bash unit_test.sh`.  
+#### 分表
+1. 采用的mysql分表方式中，单表最大2千万个短链数据量，最大支持2590个分表
+2. 默认分表数量为2，可在`model/url_shorten.go`中更改`UrlShortenTableCnt`变量
+
+## 随机性测试
+数字增加1时，生成的6位短链变化很大。测试结果显示，数量加1运行1,000,000次时，生成的短链中变化了5-6个字符;  
+可自行测试`bash unit_test.sh`
 ```
         	changeCharNum	cnt
         	1	0
