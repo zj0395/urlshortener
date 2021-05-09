@@ -8,6 +8,6 @@ require (
 	github.com/rs/xid v1.2.1
 	github.com/rs/zerolog v1.18.0
 	github.com/valyala/fasthttp v1.23.0
-	github.com/zj0395/golib v0.0.0-20210420104028-caa89afd7c20
+	github.com/zj0395/golib v0.0.0-20210509074428-0081e20e4b6e
 	gorm.io/gorm v1.21.9
 )

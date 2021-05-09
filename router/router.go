@@ -66,7 +66,7 @@ func (t *wrapper) Exec(ctx *fasthttp.RequestCtx) {
 
 func GetRouter() *router.Router {
 	r := router.New()
-	r.ANY("/create", NewWrapper(handlers.Create).Exec)
-	r.ANY("/s{code}", NewWrapper(handlers.Access).Exec)
+	r.ANY("/surl/create", NewWrapper(handlers.Create).Exec)
+	r.ANY("/{code}", NewWrapper(handlers.Access).Exec)
 	return r
 }
