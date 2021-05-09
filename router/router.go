@@ -32,7 +32,7 @@ func (t *wrapper) Add(handler fasthttp.RequestHandler) *wrapper {
 }
 
 func (t *wrapper) Exec(ctx *fasthttp.RequestCtx) {
-	startTime := time.Now().UnixNano()
+	startTime := time.Now()
 
 	middleware.Init(ctx)
 	logger := utils.GetLogger(ctx)
@@ -43,7 +43,7 @@ func (t *wrapper) Exec(ctx *fasthttp.RequestCtx) {
 			logger.Fatal().Str("stack", fatalErr).Msg("[FATAL 500]")
 			handlers.SetErrorOutput(ctx, errors.PanicError)
 		}
-		logger.Info().Int64("costms", (time.Now().UnixNano()-startTime)/1000000).Msg("Request Done")
+		logger.Info().Int64("costms", time.Since(startTime).Milliseconds()).Msg("Request Done")
 	}()
 
 	for _, h := range t.middleWares {

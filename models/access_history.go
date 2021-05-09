@@ -6,7 +6,7 @@ import (
 
 const (
 	gAccessHistoryTablePrefix = "access_history_"
-	gAccessHistoryTableCnt    = 1
+	AccessHistoryTableCnt     = 2
 )
 
 type AccessHistory struct {
@@ -17,5 +17,5 @@ type AccessHistory struct {
 }
 
 func GetAccessHistoryTableById(id int64) string {
-	return fmt.Sprintf("%s%d", gAccessHistoryTablePrefix, getUrlShortenTableIdxById(id)%gAccessHistoryTableCnt)
+	return fmt.Sprintf("%s%d", gAccessHistoryTablePrefix, getUrlShortenTableIdxById(id)%AccessHistoryTableCnt)
 }

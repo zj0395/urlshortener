@@ -30,6 +30,11 @@ func Access(ctx *fasthttp.RequestCtx) {
 	// get from db
 	obj := models.UrlShorten{}
 	models.DBTx(models.GetUrlShortenTableById(id)).Find(&obj, id)
+	if obj.ID == 0 {
+		logger.Warn().Str("code", code).Int64("id", id).Msg("Code not found")
+		SetErrorOutput(ctx, errors.CodeNotExist)
+		return
+	}
 
 	go func() {
 		ah := models.AccessHistory{

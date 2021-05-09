@@ -7,8 +7,12 @@ import (
 
 const (
 	gUrlShortenTablePrefix = "url_shorten_"
-	gUrlShortenTableCnt    = 1
-	gUrlShortenIdBegin     = 50 * 10000 * 10000
+	UrlShortenIdBegin      = 50 * 10000 * 10000
+	UrlShortenPerTableCnt  = 1 * 2000 * 10000
+
+	// max value: 2590
+	// (utils/shorten.maxNum - UrlShortenIdBegin) / UrlShortenPerTableCnt
+	UrlShortenTableCnt = 2
 )
 
 type UrlShorten struct {
@@ -22,7 +26,7 @@ type UrlShorten struct {
 func GetUrlShortenTable(url string) string {
 	f := fnv.New32()
 	f.Write([]byte(url))
-	return fmt.Sprintf("%s%d", gUrlShortenTablePrefix, f.Sum32()%gUrlShortenTableCnt)
+	return fmt.Sprintf("%s%d", gUrlShortenTablePrefix, f.Sum32()%UrlShortenTableCnt)
 }
 
 func GetUrlShortenTableById(id int64) string {
@@ -30,7 +34,7 @@ func GetUrlShortenTableById(id int64) string {
 }
 
 func getUrlShortenTableIdxById(id int64) int64 {
-	res := (id - gUrlShortenIdBegin) % gUrlShortenTableCnt
+	res := (id - UrlShortenIdBegin) / UrlShortenPerTableCnt
 	if res < 0 {
 		res = 0
 	}

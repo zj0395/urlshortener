@@ -33,11 +33,15 @@ func initDB() {
 }
 
 func initLog() {
-	conf := golog.LogConf{
-		File:  "log/tmp.log",
-		Level: -1,
+	conf := &golog.RotateLogConf{
+		LogConf: golog.LogConf{
+			File:  "log/tmp.log",
+			Level: -1,
+		},
+
+		EnableRotate: true,
 	}
-	golog.SetDefault(golog.Init(&conf))
+	golog.SetDefault(golog.NewRotateLog(conf).GetLogger())
 }
 
 func main() {
@@ -53,7 +57,7 @@ func main() {
 		WriteTimeout:     time.Second * 30,
 		DisableKeepalive: false,
 		LogAllErrors:     true,
-		Logger:           golog.GetDefault(),
+		Logger:           golog.LogForwarder(),
 	}
 
 	go func() {

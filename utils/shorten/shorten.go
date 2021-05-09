@@ -1,8 +1,8 @@
 package shorten
 
 const (
-	minNum = 0xffffffff + 1
-	maxNum = 62*62*62*62*62*62 - 0xffffffff
+	minNum = 0xffffffff + 1                 // `intConvert` result bigger than 62^5
+	maxNum = 62*62*62*62*62*62 - 0xffffffff // less than 62^6
 )
 
 // IDShorten Convert int64 to number base62
@@ -24,7 +24,7 @@ func IDRecover(code string) int64 {
 	var res int64
 	var pow int64 = 1
 	for i := len(code) - 1; i >= 0; i-- {
-		res += charMap[code[i]] * pow
+		res += idCharMap[code[i]] * pow
 		pow *= idStrLen
 	}
 	res = intRecover(res)

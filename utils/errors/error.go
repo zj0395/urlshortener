@@ -27,7 +27,8 @@ var (
 	NotFound   = &Error{404, 404, "unsupport api"}
 	PanicError = &Error{500, 500, "server error"}
 
-	ParamError = &Error{200, 1001, "param error"}
+	ParamError   = &Error{200, 1001, "param error"}
+	CodeNotExist = &Error{200, 1002, "not exist"}
 
 	UnknownError      = &Error{200, 1100, "unknown error"}
 	ErrorFlagValError = &Error{200, 1101, "unknown error"}

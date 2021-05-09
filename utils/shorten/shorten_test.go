@@ -45,7 +45,9 @@ func TestIDShorten(t *testing.T) {
 }
 
 func BenchmarkIDShorten(t *testing.B) {
-	IDRecover(IDShorten(1111111111111))
+	for i := 0; i < t.N; i++ {
+		IDRecover(IDShorten(1111111111111))
+	}
 }
 
 func TestIDIncr(t *testing.T) {

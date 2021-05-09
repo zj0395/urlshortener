@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"github.com/rs/zerolog"
 	"github.com/valyala/fasthttp"
 
 	"github.com/zj0395/golib/golog"
@@ -39,12 +38,12 @@ func SetData(ctx *fasthttp.RequestCtx, data interface{}) {
 	ctx.SetUserValue(DataFlag, data)
 }
 
-func GetLogger(ctx *fasthttp.RequestCtx) *zerolog.Logger {
+func GetLogger(ctx *fasthttp.RequestCtx) *golog.Logger {
 	raw := ctx.UserValue(LoggerFlag)
 	if raw == nil {
 		return nil
 	}
-	if v, ok := raw.(*zerolog.Logger); ok {
+	if v, ok := raw.(*golog.Logger); ok {
 		return v
 	}
 	return golog.GetDefault()
