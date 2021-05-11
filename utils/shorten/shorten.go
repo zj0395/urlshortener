@@ -1,8 +1,8 @@
 package shorten
 
 const (
-	minNum = 0xffffffff + 1                 // `intConvert` result bigger than 62^5
-	maxNum = 62*62*62*62*62*62 - 0xffffffff // less than 62^6
+	minNum = 62*62*62*62*62 + 1              // bigger than 62^5
+	maxNum = 62*62*62*62*62*62 - 0x3ffffffff // less than 62^6
 )
 
 // IDShorten Convert int64 to number base62
@@ -33,22 +33,25 @@ func IDRecover(code string) int64 {
 
 // intConvert convert a int to another
 func intConvert(raw int64) int64 {
-	val := raw & 0x0fffffff00000000
-	// only convert int32
-	val += (raw & 0xff000000) >> 16
-	val += (raw & 0x00ff0000) >> 16
-	val += (raw & 0x0000ff00) << 8
-	val += (raw & 0x000000ff) << 24
+	val := raw & 0x0ffffffc00000000
+	// only convert int34 0x3ffffffff
+	val += (raw & 0x3ff000000) >> 16
+	val += (raw & 0x000ff0000) >> 16
+	val += (raw & 0x00000ff00) << 10
+	val += (raw & 0x0000000ff) << 26
+
+	val += minNum
 	return val
 }
 
 // intRecover undo intConvert
 func intRecover(val int64) int64 {
-	raw := val & 0x0fffffff00000000
+	val -= minNum
+	raw := val & 0x0ffffffc00000000
 
-	raw += (val & 0xff000000) >> 24
-	raw += (val & 0x00ff0000) >> 8
-	raw += (val & 0x000000ff) << 16
-	raw += (val & 0x0000ff00) << 16
+	raw += (val & 0x3fc000000) >> 26
+	raw += (val & 0x003fc0000) >> 10
+	raw += (val & 0x0000000ff) << 16
+	raw += (val & 0x00003ff00) << 16
 	return raw
 }

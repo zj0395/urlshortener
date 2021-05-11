@@ -7,12 +7,13 @@ import (
 
 const (
 	gUrlShortenTablePrefix = "url_shorten_"
-	UrlShortenIdBegin      = 50 * 10000 * 10000
 	UrlShortenPerTableCnt  = 1 * 2000 * 10000
 
-	// max value: 2590
-	// (utils/shorten.maxNum - UrlShortenIdBegin) / UrlShortenPerTableCnt
+	// max value: (utils/shorten.maxNum) / UrlShortenPerTableCnt = 1981
 	UrlShortenTableCnt = 2
+
+	// for scale up
+	urlShortenTableWBegin = 0
 )
 
 type UrlShorten struct {
@@ -23,18 +24,20 @@ type UrlShorten struct {
 	Extra string `gorm:"column:extra" json:"extra"`
 }
 
+// GetUrlShortenTable for write
 func GetUrlShortenTable(url string) string {
 	f := fnv.New32()
 	f.Write([]byte(url))
-	return fmt.Sprintf("%s%d", gUrlShortenTablePrefix, f.Sum32()%UrlShortenTableCnt)
+	return fmt.Sprintf("%s%d", gUrlShortenTablePrefix, f.Sum32()%(UrlShortenTableCnt-urlShortenTableWBegin)+urlShortenTableWBegin)
 }
 
+// GetUrlShortenTableById for read
 func GetUrlShortenTableById(id int64) string {
 	return fmt.Sprintf("%s%d", gUrlShortenTablePrefix, getUrlShortenTableIdxById(id))
 }
 
 func getUrlShortenTableIdxById(id int64) int64 {
-	res := (id - UrlShortenIdBegin) / UrlShortenPerTableCnt
+	res := id / UrlShortenPerTableCnt
 	if res < 0 {
 		res = 0
 	}

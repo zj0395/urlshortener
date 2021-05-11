@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS $BQaccess_history_{{.tableIdx}}$BQ (
 	accessHistoryTableTpl = strings.ReplaceAll(_accessHistoryTableTpl, "$BQ", "`")
 )
 
-func main2() {
+func main() {
 	GenerateShortenTable()
 	GenerateAccessHistoryTable()
 }
@@ -49,7 +49,7 @@ func GenerateShortenTable() {
 	for i := 0; i < models.UrlShortenTableCnt; i++ {
 		data := map[string]interface{}{
 			"tableIdx":  i,
-			"autoIncre": models.UrlShortenIdBegin + models.UrlShortenPerTableCnt*i,
+			"autoIncre": models.UrlShortenPerTableCnt * i,
 		}
 		tpl.Execute(os.Stdout, data)
 	}
