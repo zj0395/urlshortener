@@ -22,7 +22,6 @@ func initDB() {
 	dbConf := conf.DBConf{}
 	if _, err := toml.DecodeFile("./config/db.toml", &dbConf); err != nil {
 		panic(err)
-		return
 	}
 	if v, err := db.InitDB(&dbConf); err != nil {
 		panic(err.Error())
@@ -53,8 +52,8 @@ func main() {
 	server := &fasthttp.Server{
 		Name:             "url-shorten",
 		Handler:          router.GetRouter().Handler,
-		ReadTimeout:      time.Second * 30,
-		WriteTimeout:     time.Second * 30,
+		ReadTimeout:      time.Second * 3,
+		WriteTimeout:     time.Second * 5,
 		DisableKeepalive: false,
 		LogAllErrors:     true,
 		Logger:           golog.LogForwarder(),
@@ -64,7 +63,6 @@ func main() {
 		err := server.ListenAndServe(fmt.Sprintf(":%d", 8082))
 		if err != nil {
 			panic(err)
-			return
 		}
 	}()
 
@@ -75,6 +73,10 @@ func main() {
 
 	// Stop the service gracefully.
 	golog.Info().Msg("begin shutdown")
+
+	// may cost sometime
+	// depends on `DisableKeepalive` and `ReadTimeout` options
 	server.Shutdown()
+
 	golog.Info().Msg("shutdown succ")
 }

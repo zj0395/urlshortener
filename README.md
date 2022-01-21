@@ -6,6 +6,16 @@
 2. 在自己的mysql中建表，可用`go run meta/sql_generate.go`生成建表sql
 3. 运行 `go run main.go`
 
+### Curl
+#### Create
+```
+curl --location --request GET 'http://{YOUR_HOST}/surl/create?url=https://baidu.com/'
+```
+#### Access
+```
+curl --location --request GET 'http://{YOUR_HOST}/{YOUR_CODE}'
+```
+
 ### 自定义
 #### 生成自己的唯一递增序列
 1. 可以使用`go run meta/random_seq.go`生成自己的唯一序列，见`utils/shorten/defines.go`

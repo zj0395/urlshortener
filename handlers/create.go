@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"strings"
 	"time"
 
 	"github.com/valyala/fasthttp"
@@ -13,7 +14,13 @@ import (
 
 func Create(ctx *fasthttp.RequestCtx) {
 	logger := utils.GetLogger(ctx)
-	url := string(ctx.QueryArgs().Peek("url"))
+	url := strings.TrimSpace(string(ctx.QueryArgs().Peek("url")))
+
+	if url == "" {
+		logger.Error().Str("error", "empty url").Msg("Create shorturl error")
+		utils.SetError(ctx, errors.ParamError)
+		return
+	}
 
 	// insert db
 	obj := models.UrlShorten{
