@@ -9,11 +9,13 @@ const (
 	gUrlShortenTablePrefix = "url_shorten_"
 	UrlShortenPerTableCnt  = 1 * 2000 * 10000
 
-	// max value: (utils/shorten.maxNum) / UrlShortenPerTableCnt = 1981
+	// change to use more table
+	// max value: (utils/shorten.maxNum) / UrlShortenPerTableCnt ~= 1981
 	UrlShortenTableCnt = 2
 
-	// for scale up
-	urlShortenTableWBegin = 0
+	// for scale up, table idx begin from this
+	// use when tables is already fill, then create new table
+	urlShortenTableBegin = 0
 )
 
 type UrlShorten struct {
@@ -28,7 +30,7 @@ type UrlShorten struct {
 func GetUrlShortenTable(url string) string {
 	f := fnv.New32()
 	f.Write([]byte(url))
-	return fmt.Sprintf("%s%d", gUrlShortenTablePrefix, f.Sum32()%(UrlShortenTableCnt-urlShortenTableWBegin)+urlShortenTableWBegin)
+	return fmt.Sprintf("%s%d", gUrlShortenTablePrefix, f.Sum32()%(UrlShortenTableCnt-urlShortenTableBegin)+urlShortenTableBegin)
 }
 
 // GetUrlShortenTableById for read

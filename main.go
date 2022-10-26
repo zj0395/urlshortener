@@ -60,14 +60,14 @@ func main() {
 	}
 
 	go func() {
-		err := server.ListenAndServe(fmt.Sprintf(":%d", 8082))
+		err := server.ListenAndServe(fmt.Sprintf(":%d", 8083))
 		if err != nil {
 			panic(err)
 		}
 	}()
 
 	// Handle SIGINT and SIGTERM.
-	ch := make(chan os.Signal)
+	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
 	<-ch
 

@@ -3,7 +3,7 @@
 
 ## 快速开始
 1. 更改`config/*.tpl`文件中的mysql配置，并删除文件名中的`.tpl`
-2. 在自己的mysql中建表，可用`go run meta/sql_generate.go`生成建表sql
+2. 在自己的mysql中建表，可用`go run meta/sql_generate.go`生成建表sql。如果想修改分表数量，可以修改`models.UrlShortenTableCnt`值和`models.AccessHistoryTableCnt`，默认都是2
 3. 运行 `go run main.go`
 
 ### Curl
