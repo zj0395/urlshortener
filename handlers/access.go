@@ -52,5 +52,6 @@ func Access(ctx *fasthttp.RequestCtx) {
 		}
 	}()
 
+	logger.Info().Int64("id", id).Str("code", code).Msg("access succ")
 	ctx.Redirect(obj.Url, fasthttp.StatusFound)
 }
