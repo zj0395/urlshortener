@@ -36,10 +36,11 @@ func Access(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
+	clientIP := utils.ClientIP(ctx)
 	go func() {
 		ah := models.AccessHistory{
 			Code:  code,
-			Ip:    utils.ClientIP(ctx),
+			Ip:    clientIP,
 			Ctime: time.Now().Unix(),
 		}
 		dbRes := models.DBTx(models.GetAccessHistoryTableById(id)).Create(&ah)
