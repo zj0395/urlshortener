@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -44,8 +45,10 @@ func Create(ctx *fasthttp.RequestCtx) {
 	code := shorten.IDShorten(obj.ID)
 	logger.Info().Int64("id", obj.ID).Str("code", code).Msg("Create url succ")
 
+	host := ctx.Request.Header.Host()
 	resp := map[string]interface{}{
 		"code": code,
+		"surl": fmt.Sprintf("%s/%s", host, code),
 	}
 	utils.SetData(ctx, resp)
 }

@@ -8,7 +8,13 @@ import (
 )
 
 func Init(ctx *fasthttp.RequestCtx) {
-	logid := utils.GenLogId()
+	const requestIDHeader = "X-Request-Id"
+	var logid string
+	if v := ctx.Request.Header.Peek(requestIDHeader); v != nil {
+		logid = string(v)
+	} else {
+		logid = utils.GenLogId()
+	}
 	utils.SetLogId(ctx, logid)
 	logger := golog.GetDefault().With().Str("logid", logid).Logger()
 	utils.SetLogger(ctx, &logger)
