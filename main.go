@@ -39,8 +39,8 @@ func initLog() {
 		},
 
 		EnableRotate: true,
-		Period:       1,
-		UseMinute:    true,
+		Period:       24,
+		UseMinute:    false,
 	}
 	golog.SetDefault(golog.NewRotateLog(conf).GetLogger())
 }

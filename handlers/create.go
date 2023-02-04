@@ -7,37 +7,38 @@ import (
 
 	"github.com/valyala/fasthttp"
 
+	"github.com/zj0395/golib/fhlib"
+	"github.com/zj0395/golib/liberr"
+
 	"github.com/zj0395/urlshortener/models"
-	"github.com/zj0395/urlshortener/utils"
-	"github.com/zj0395/urlshortener/utils/errors"
 	"github.com/zj0395/urlshortener/utils/shorten"
 )
 
 func Create(ctx *fasthttp.RequestCtx) {
-	logger := utils.GetLogger(ctx)
+	logger := fhlib.GetLogger(ctx)
 	url := strings.TrimSpace(string(ctx.QueryArgs().Peek("url")))
 
 	if url == "" {
 		logger.Error().Str("error", "empty url").Msg("Create shorturl error")
-		utils.SetError(ctx, errors.ParamError)
+		fhlib.SetError(ctx, liberr.ParamError)
 		return
 	}
 
 	// insert db
 	obj := models.UrlShorten{
 		Url:   url,
-		Ip:    utils.ClientIP(ctx),
+		Ip:    fhlib.ClientIP(ctx),
 		Ctime: time.Now().Unix(),
 	}
 	dbRes := models.DBTx(models.GetUrlShortenTable(url)).Create(&obj)
 	if dbRes.Error != nil {
 		logger.Error().Str("error", dbRes.Error.Error()).Msg("Create shorturl error")
-		utils.SetError(ctx, dbRes.Error)
+		fhlib.SetError(ctx, dbRes.Error)
 		return
 	}
 	if dbRes.RowsAffected == 0 {
 		logger.Error().Msg("Create shorturl fail, affectet row = 0")
-		utils.SetError(ctx, errors.DbError)
+		fhlib.SetError(ctx, liberr.DBError)
 		return
 	}
 
@@ -50,5 +51,5 @@ func Create(ctx *fasthttp.RequestCtx) {
 		"code": code,
 		"surl": fmt.Sprintf("%s/%s", host, code),
 	}
-	utils.SetData(ctx, resp)
+	fhlib.SetData(ctx, resp)
 }

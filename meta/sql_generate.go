@@ -14,7 +14,7 @@ var (
 	_shortenTableTpl = `
 CREATE TABLE IF NOT EXISTS $BQurl_shorten_{{.tableIdx}}$BQ (
   $BQid$BQ bigint(20) NOT NULL AUTO_INCREMENT,
-  $BQurl$BQ varchar(256) NOT NULL DEFAULT '' COMMENT 'url',
+  $BQurl$BQ varchar(1024) NOT NULL DEFAULT '' COMMENT 'url',
   $BQip$BQ varchar(41) NOT NULL DEFAULT '' COMMENT 'creater ip',
   $BQctime$BQ int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'create time',
   $BQextra$BQ varchar(256) NOT NULL DEFAULT '' COMMENT 'extra info',
