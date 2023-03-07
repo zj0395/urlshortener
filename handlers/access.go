@@ -29,6 +29,12 @@ func Access(ctx *fasthttp.RequestCtx) {
 	// recover id from code
 	id := shorten.IDRecover(code)
 
+	if !models.IsIDValid(id) {
+		logger.Warn().Str("code", code).Msg("invalid code")
+		fhlib.SetErrorOutput(ctx, errors.CodeNotExist)
+		return
+	}
+
 	// get from db
 	obj := models.UrlShorten{}
 	models.DBTx(models.GetUrlShortenTableById(id)).Find(&obj, id)

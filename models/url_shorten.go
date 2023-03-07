@@ -38,6 +38,10 @@ func GetUrlShortenTableById(id int64) string {
 	return fmt.Sprintf("%s%d", gUrlShortenTablePrefix, getUrlShortenTableIdxById(id))
 }
 
+func IsIDValid(id int64) bool {
+	return getUrlShortenTableIdxById(id) < UrlShortenTableCnt
+}
+
 func getUrlShortenTableIdxById(id int64) int64 {
 	res := id / UrlShortenPerTableCnt
 	if res < 0 {
